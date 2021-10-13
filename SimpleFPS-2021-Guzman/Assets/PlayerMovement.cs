@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     float moveSpeed = 10;
     [SerializeField]
     float jumpSpeed = 10;
+    [SerializeField]
+    Transform cam;
 
     Rigidbody rb;
     // Start is called before the first frame update
@@ -26,7 +28,17 @@ public class PlayerMovement : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        rb.velocity = new Vector3(h * moveSpeed, rb.velocity.y, v * moveSpeed);
+        Vector3 camForward = cam.forward;
+        Vector3 camRight = cam.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 moveDirection = (camForward * v * moveSpeed) + (camRight * h * moveSpeed);
+
+        rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
 
         if (Physics.Raycast(r, out hit, 1) && hit.transform.tag == "ground")
         {
