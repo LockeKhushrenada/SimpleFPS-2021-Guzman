@@ -8,7 +8,9 @@ public class CameraControl : MonoBehaviour
     float rotSpeed = 1;
 
     [SerializeField]
-    Transform LookUpDown;
+    Transform playerBody;
+
+    float xRotation = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,24 +20,14 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float x = Input.GetAxis("Mouse X");
-        float y = Input.GetAxis("Mouse Y");
-        //y = Mathf.Clamp(y * rotSpeed * Time.deltaTime * -1, -90f, 90f);
-        transform.Rotate(new Vector3(0, x * rotSpeed * Time.deltaTime, 0));
-        if (LookUpDown.localEulerAngles.y >= -80f && LookUpDown.localEulerAngles.y <= 80f)
-        {
-            LookUpDown.Rotate(new Vector3(y * rotSpeed * Time.deltaTime * -1, 0, 0));
-        }
-        else
-        {
-            if(LookUpDown.localEulerAngles.y * -1 <= -80f)
-            {
-                LookUpDown.Rotate(new Vector3(-1,0,0));
-            }
-            if (LookUpDown.localEulerAngles.y * -1 >= 80f)
-            {
-                LookUpDown.Rotate(-1,0,0);
-            }
-        }
+        float x = Input.GetAxis("Mouse X") * rotSpeed * Time.deltaTime;
+        float y = Input.GetAxis("Mouse Y") * rotSpeed * Time.deltaTime * 1;
+
+        xRotation -= y;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        playerBody.Rotate(Vector3.up * x);
+        
     }
 }
