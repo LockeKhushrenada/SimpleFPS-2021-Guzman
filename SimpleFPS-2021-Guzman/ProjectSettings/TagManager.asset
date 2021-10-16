@@ -6,6 +6,8 @@ TagManager:
   tags:
   - ground
   - Enemy
+  - ammo
+  - hazard
   layers:
   - Default
   - TransparentFX
